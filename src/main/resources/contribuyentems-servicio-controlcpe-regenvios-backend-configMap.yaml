@@ -1,0 +1,82 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+  namespace: default
+data:   
+#habilitar log INFO or DEBUG
+    logginglevel: DEBUG
+    loggingloggerssunat: DEBUG
+#kafka cluster
+    clusterkafkaserver: "srvcpeseskafka01.sunat.peru:9092,srvcpeseskafka02.sunat.peru:9092,srvcpeseskafka03.sunat.peru:9092"
+#kafka producer (solo en caso envie mensajes al kafka)    
+    ssppproductortopicproducer: "topic-contribuyente-servicio-controlcpe-registromasivo"    
+#usuarios mongodb
+    cnxmongousuarioope: usmigeope
+    cnxmongousuariocon: usmigecon
+    cnxmongousuarioopefs: usgmoralesu
+    cnxmongousuariocongfs: usgmoralesu
+#conexiones ope
+    cnxmongodatasourceope: "dgbdServMige"
+    cnxmongodatabaseope: "bdMige"
+#nodos ope
+    cnxmongohostnode1ope: "mdbcpesspp0.sunat.peru"
+    cnxmongoportnode1ope: "27017"
+    cnxmongohostnode2ope: "mdbcpesspp1.sunat.peru"
+    cnxmongoportnode2ope: "27018"
+    cnxmongohostnode3ope: "mdbcpesspp2.sunat.peru"
+    cnxmongoportnode3ope: "27019"
+#replica ope
+    cnxmongoreplicasetope: "cpessppRs0"
+    cnxmongoreadpreferenceope: "secondaryPreferred"
+    cnxmongowriteconcernope: "w1"
+    cnxmongomaxpoolsizeope: "200"
+    cnxmongominpoolsizeope: "0"
+#conexiones consulta
+    cnxmongodatasourcecon: "dcbdServMige"
+    cnxmongodatabasecon: "bdMige"
+#nodos consulta
+    cnxmongohostnode1con: "mdbcpesspp0.sunat.peru"
+    cnxmongoportnode1con: "27017"
+    cnxmongohostnode2con: "mdbcpesspp1.sunat.peru"
+    cnxmongoportnode2con: "27018"
+    cnxmongohostnode3con: "mdbcpesspp2.sunat.peru"
+    cnxmongoportnode3con: "27019"
+#replica consulta
+    cnxmongoreplicasetcon: "cpessppRs0"
+    cnxmongoreadpreferencecon: "secondaryPreferred"
+    cnxmongowriteconcerncon: "w1"
+    cnxmongomaxpoolsizecon: "200"
+    cnxmongominpoolsizecon: "0"
+#conexiones ope
+    cnxmongodatasourceopegfs: "dgbdServMigeArchivos"
+    cnxmongodatabaseopegfs: "bdMigeArchivos"
+#nodos ope
+    cnxmongohostnode1opegfs: "mdbcpesspp0.sunat.peru"
+    cnxmongoportnode1opegfs: "27017"
+    cnxmongohostnode2opegfs: "mdbcpesspp1.sunat.peru"
+    cnxmongoportnode2opegfs: "27018"
+    cnxmongohostnode3opegfs: "mdbcpesspp2.sunat.peru"
+    cnxmongoportnode3opegfs: "27019"
+#replica ope
+    cnxmongoreplicasetopegfs: "cpessppRs0"
+    cnxmongoreadpreferenceopegfs: "secondaryPreferred"
+    cnxmongowriteconcernopegfs: "w1"
+    cnxmongomaxpoolsizeopegfs: "200"
+    cnxmongominpoolsizeopegfs: "0"
+#conexiones consulta
+    cnxmongodatasourcecongfs: "dcbdServMigeArchivos"
+    cnxmongodatabasecongfs: "bdMigeArchivos"
+#nodos consulta
+    cnxmongohostnode1congfs: "mdbcpesspp0.sunat.peru"
+    cnxmongoportnode1congfs: "27017"
+    cnxmongohostnode2congfs: "mdbcpesspp1.sunat.peru"
+    cnxmongoportnode2congfs: "27018"
+    cnxmongohostnode3congfs: "mdbcpesspp2.sunat.peru"
+    cnxmongoportnode3congfs: "27019"
+#replica consulta
+    cnxmongoreplicasetcongfs: "cpessppRs0"
+    cnxmongoreadpreferencecongfs: "secondaryPreferred"
+    cnxmongowriteconcerncongfs: "w1"
+    cnxmongomaxpoolsizecongfs: "200"
+    cnxmongominpoolsizecongfs: "0"

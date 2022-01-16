@@ -1,0 +1,423 @@
+buildscript {
+  repositories {
+    maven {
+      url "${sunatPUrepo}integracion-release-local"
+      credentials {
+        username = "${sunatPUrepoUser}"
+        password = "${sunatPUrepoPassword}"
+      }
+    }
+    maven {
+        url "${sunatPUrepo}libs-release"
+        credentials {
+				username = "${sunatPUrepoUser}"
+				password = "${sunatPUrepoPassword}"
+        }		
+    }
+
+
+  }  
+  dependencies {
+    classpath 'pe.gob.sunat.dev.plugin.ms:gen-ms-dev-plugin:0.0.1.1'    
+    classpath('org.codehaus.groovy.modules.http-builder:http-builder:0.6') {
+      exclude group: 'org.codehaus.groovy', module: 'groovy'
+    }
+    classpath(group: 'org.codehaus.groovy', name: 'groovy', version: '2.1.0')
+
+    classpath('org.hidetake:gradle-ssh-plugin:2.9.0')
+  }
+}
+
+apply plugin: 'pe.gob.sunat.dev.plugin.ms'
+
+mainClassName = 'pe.gob.sunat.contribuyentems.registro.gre.envios.main.EnviosNoConformidadApplication'
+
+  repositories {
+    maven {
+        url "${sunatPUrepo}libs-release"
+        credentials {
+				username = "${sunatPUrepoUser}"
+				password = "${sunatPUrepoPassword}"
+        }		
+    }
+    maven {
+      url "${sunatPUrepo}integracion-release-local"
+      credentials {
+        username = "${sunatPUrepoUser}"
+        password = "${sunatPUrepoPassword}"
+      }
+    }
+
+  }  
+
+dependencies {
+
+  configurations.all{
+	  ['core', 'forms','views','views-freemarker'].each {
+	    compile "io.dropwizard:dropwizard-${it}:1.3.14"
+	  }
+  	resolutionStrategy.force "io.dropwizard.metrics:metrics-healthchecks:4.0.5"
+  }
+  //framework
+  compile 'io.dropwizard.metrics:metrics-healthchecks:4.0.5'
+  compile(group: 'procesos.tecnologia3.arquitectura', name: 'tecnologia3-arquitectura-framework-kafka', version: '1.5.0')
+  compile 'tecnologiams.arquitectura:tecnologiams-arquitectura-framework-baseframework:0.1.0'
+  
+  compile 'org.mongodb:mongodb-driver-sync:3.10.2'
+  compile 'org.mongodb:bson:3.10.2'
+  compile 'org.mongodb:mongodb-driver-core:3.10.2'
+  
+  compile 'procesos.tecnologiams.arquitectura:tecnologiams-arquitectura-framework-mongodb:1.2.0'
+  compile('tecnologiams.arquitectura:tecnologiams-arquitectura-framework-elk:1.0.0')
+
+//  compile fileTree(dir: 'lib', include: '*.jar')
+  compile 'io.dropwizard:dropwizard-forms:1.0.5'
+  //testing
+  testImplementation 'io.dropwizard:dropwizard-testing:1.2.4'
+  testCompile group: 'org.powermock', name: 'powermock-api-mockito2', version: '2.0.5'
+  testCompile group: 'org.powermock', name: 'powermock-module-junit4', version: '2.0.5'
+  compile ('contribuyentems.registro:contribuyentems-registro-gre-shared-backend-lib:1.0.1-1'){
+    exclude group: 'org.jboss.logging', module: 'jboss-logging-spi'
+    exclude group: 'javax.enterprise', module: 'cdi-api'
+    exclude group: 'org.jboss.weld.se', module: 'weld-se'
+    exclude group: 'org.jboss.weld.servlet', module: 'weld-servlet-test-jetty'
+  }
+    compile ('contribuyentems.registro:contribuyentems-registro-gre-basebdgre-lib:1.0.1-1'){
+    exclude group: 'org.jboss.logging', module: 'jboss-logging-spi'
+    exclude group: 'javax.enterprise', module: 'cdi-api'
+    exclude group: 'org.jboss.weld.se', module: 'weld-se'
+    exclude group: 'org.jboss.weld.servlet', module: 'weld-servlet-test-jetty'
+  }
+  
+}
+// Jacoco y Sonarqube
+test {
+  finalizedBy jacocoTestReport // report is always generated after tests run
+}
+jacocoTestReport {
+  dependsOn test // tests are required to run before generating the report
+  reports {
+    xml.enabled true
+    html.enabled true
+  }
+
+  test {
+    jacoco {
+      destinationFile = file("$buildDir/jacoco/test.exec")
+      classDumpDir = file("$buildDir/jacoco/classpathdumps")
+      excludes = [
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain.*',
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.main.*',
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.producer.*',
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.repository.*',
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.util.*',
+              'pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.ws.*',
+      ]
+    }
+  }
+  afterEvaluate {
+    classDirectories = files(classDirectories.files.collect {
+      fileTree(dir: it,
+              exclude: [
+                      '**/domain/**',
+                      '**/main/**',
+                      '**/producer/**',
+                      '**/repository/**',
+                      '**/util/**',
+                      '**/ws/**',
+              ])
+    })
+  }
+}
+sonarqube {
+  properties {
+    // para excluir solo del coverage
+    property 'sonar.coverage.exclusions', [
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/domain/**",
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/main/**",
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/producer/**",
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/repository/**",
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/util/**",
+            "**/pe/gob/sunat/contribuyentems/servicio/controlcpe/registro/envios/ws/**"
+    ]
+    property 'sonar.jacoco.reportPath', "$buildDir/jacoco/test.exec"
+//    property 'sonar.host.url', 'http://10.230.168.223:9000'
+    property 'sonar.host.url', 'http://sonarqube.insi.sunat.peru:9000'
+  }
+}
+// Promotion
+import groovyx.net.http.HttpResponseDecorator
+import groovyx.net.http.RESTClient
+import org.apache.http.HttpHeaders
+import groovyx.net.http.HTTPBuilder
+import static groovyx.net.http.ContentType.*
+import static groovyx.net.http.Method.*
+
+class PromoteTask extends DefaultTask {
+  PromoteTask() {
+    group = "Promotion"
+  }
+  @Input
+  def repoKey
+
+  @Input
+  def targetRepo
+
+  @Input
+  def dockerRepository
+
+  @Input
+  def tag
+
+  @Input
+  def username
+
+  @Input
+  def password
+
+  @Input
+  def contextUrl
+
+  @Input
+  def copy = true
+
+  @TaskAction
+  void promote() {
+    URL url = new URL("$contextUrl/api/docker/$repoKey/v2/promote")
+    URI uri = new URI(url.getProtocol(), url.getUserInfo(), url.getHost(), url.getPort(), url.getPath(), url.getQuery(), url.getRef())
+    def http = new HTTPBuilder(uri.toString())
+
+    http.setHeaders([Authorization: 'Basic ' + ("$username:$password".toString().bytes.encodeBase64())])
+
+    println "Url: ${uri.toString()}"
+    println "RepoKey: ${repoKey}"
+    println "TargetRepo: ${targetRepo}"
+    println "DockerRepository: ${dockerRepository}"
+    println "Tag: ${tag}"
+
+
+    http.request(POST) {
+      requestContentType = JSON
+      body = [
+        targetRepo      : targetRepo,
+        dockerRepository: dockerRepository,
+        tag             : tag, copy: copy]
+
+      response.success = { resp ->
+        println "POST response status: ${resp.statusLine}"
+      }
+
+      response.failure = { resp ->
+        println "Request Failed: ${resp.statusLine}"
+      }
+    }
+  }
+}
+
+task promoteToCalidad(type: PromoteTask) {
+  repoKey = 'integracion1-dr-local'
+  targetRepo = 'calidad1-dr-local'
+  dockerRepository = 'microservices/' + deploymentName
+  tag = version
+  username = "${sunatPUrepoUser}"
+  password = "${sunatPUrepoPassword}"
+  contextUrl = 'http://artifactory.insi.sunat.peru:7003/artifactory'
+}
+
+task promoteToProduccion(type: PromoteTask) {
+  repoKey = 'calidad1-dr-local'
+  targetRepo = 'produccion1-dr-local'
+  dockerRepository = 'microservices/' + deploymentName
+  tag = version
+  username = "${sunatPUrepoUser}"
+  password = "${sunatPUrepoPassword}"
+  contextUrl = 'http://artifactory.insi.sunat.peru:7003/artifactory'
+}
+
+apply plugin: 'org.hidetake.ssh'
+
+ssh.settings {
+  knownHosts = allowAnyHosts
+}
+
+remotes {
+	def e = System.getenv()
+	
+  integracion4 {
+    host = e['bamboo_deployDesaIpSite4']
+    user = e['bamboo_deployUsernameDesa4']
+    password = e['bamboo_deployPasswordDesa4']
+  }  
+  calidad4A {
+    host = e['bamboo_deployQaIpSite4A'] 
+    user =   e['bamboo_deployUsernameQa'] 
+    password = e['bamboo_deployPasswordQa2']
+  }  
+  calidad4B {
+    host = e['bamboo_deployQaIpSite4B'] 
+    user =   e['bamboo_deployUsernameQa'] 
+    password = e['bamboo_deployPasswordQa2']
+  }
+  produccion4A {
+    host =  e['bamboo_deployProdK8SCPES1A']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+  produccion4B {
+    host =  e['bamboo_deployProdK8SCPES1B']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+  produccion4C {
+    host =  e['bamboo_deployProdK8SCPES1C']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+  produccion4D {
+    host =  e['bamboo_deployProdK8SCPES2A']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+  produccion4E {
+    host =  e['bamboo_deployProdK8SCPES2B']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+  produccion4F {
+    host =  e['bamboo_deployProdK8SCPES2C']
+    user =   e['bamboo_deployUsernameProd'] 
+    password = e['bamboo_ddeployPasswordProd']
+  }
+}
+
+def despliegue(Object master, int numero, int site, String repoArtifactory) {  
+ boolean exito=false;  
+	try {
+        ssh.run {
+            session(master) {
+               execute "./start-microservice.sh $deploymentName $deploymentName  $projectName $version "+repoArtifactory			   
+            }
+        }
+		exito=true;
+    } catch (Exception e) {
+        if (!System.getenv().TRAVIS) {
+            System.err.println "** SSH error: ${e.message} - some tests will fail **"
+           
+        }
+		if(numero==3 ){
+			return e;
+		}
+    }
+   return exito;
+}
+
+task setNewPublishDockerImageIntegracion {
+  doLast {
+    ssh.run {
+      session(remotes.integracion4) {
+        execute "kubectl apply -f microservices/$deploymentName --record"
+        execute "kubectl set image deployments/$deploymentName $deploymentName=integracion1-dr-local.artifactory.insi.sunat.peru/microservices/$projectName:$version"
+      }
+    }
+  }
+}
+
+task setNewDockerImageIntegracion {
+  doLast {
+    ssh.run {
+      session(remotes.integracion4) {
+        execute "kubectl set image deployments/$deploymentName $deploymentName=integracion1-dr-local.artifactory.insi.sunat.peru/microservices/$projectName:$version"
+      }
+    }
+  }
+}
+
+task setNewDockerImageCalidad {
+  doLast {
+    	String repo="calidad1-dr-local.artifactory.insi.sunat.peru"
+		boolean exito;
+		//Object site1Error=null;
+		Object site2Error=null;
+		
+		exito = despliegue(remotes.calidad4A,1,2,repo);
+		if(!exito){
+			site2Error = despliegue(remotes.calidad4B,2,2,repo);
+		}
+		//if(site1Error!=null && site1Error != true){
+			//throw site1Error;
+		//}
+		if(site2Error!=null && site2Error !=true){
+			throw site2Error;
+		}
+  }
+}
+
+task setNewDockerImageProduccion {
+  doLast {
+    String repo="produccion1-dr-local.artifactory.insi.sunat.peru"
+		Object site1Error=null;
+		Object site2Error=null;
+		
+		boolean exito = despliegue(remotes.produccion4A,1,1,repo);
+		
+		if(!exito){
+			exito = despliegue(remotes.produccion4B,2,1,repo);
+			if(!exito){
+				site1Error = despliegue(remotes.produccion4C,3,1,repo);
+			}
+		}
+		
+		exito = despliegue(remotes.produccion4D,1,2,repo);
+		if(!exito){
+			exito = despliegue(remotes.produccion4E,2,2,repo);
+			if(!exito){
+				site2Error = despliegue(remotes.produccion4F,3,2,repo);
+			}
+		}
+
+		if(site1Error!=null && site1Error != true){
+			throw site1Error;
+		}
+		if(site2Error!=null && site2Error !=true){
+			throw site2Error;
+		}
+  }
+}
+
+task setRollbackDockerIntegracion {
+  doLast {
+    ssh.run {
+
+      session(remotes.integracion4) {
+        execute "kubectl rollout undo deployments $deploymentName"
+      }      
+    }
+  }
+}
+
+task setRollbackDockerCalidad {
+  doLast {
+    ssh.run {
+      session(remotes.calidad4A) {
+        execute "kubectl rollout undo deployments $deploymentName"
+      }
+      session(remotes.calidad4B) {
+        execute "kubectl rollout undo deployments $deploymentName"
+      }
+    }
+  }
+}
+ 
+task setRollbackDockerProduccion {
+  doLast {
+    ssh.run {
+      session(remotes.produccion4A) {
+        execute "kubectl rollout undo deployments $deploymentName"
+      }
+      session(remotes.produccion4D) {
+        execute "kubectl rollout undo deployments $deploymentName"
+      }
+    }
+  }
+}
+

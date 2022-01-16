@@ -1,0 +1,36 @@
+======================================================================
+#contribuyentems-servicio-controlcpe-regenvios-backend
+======================================================================
+Permite consultar a coleccion en MongoDB
+
+##Desarrollo
+
+1. [Gradle][3.5].
+
+2.En el archivo gradle.properties del directorio del usuario: C:\Usuarios\<UsuarioRed>\.gradle (por ejemplo C:\Usuarios\wdiazg\.gradle)
+
+Deben estar las siguientes lineas:
+
+systemProp.gradle.wrapperUser=UsuarioArtifactoryDelDesarrollador
+systemProp.gradle.wrapperPassword=ClaveUsuarioArtifactoryDelDesarrollador
+sunatPUrepo=http://artifactory.insi.sunat.peru:7003/artifactory/
+sunatPUrepoUser =UsuarioArtifactoryDelDesarrollador
+sunatPUrepoPassword =ClaveUsuarioArtifactoryDelDesarrollador
+
+
+3.VM Arguments (Eclipse) - [Opcional]:
+
+-Djava.awt.headless=true -Duser.timezone=America/Lima -Xms96m -Xmx96m -XX:ParallelGCThreads=1 -XX:CICompilerCount=2 -XX:+UnlockExperimentalVMOptions
+
+
+4.Main Class (Eclipse)
+
+  pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.main.EnviosCpeApplication
+  
+5.Program Arguments (Eclipse):
+  
+  server src/main/resources/config_local.yaml
+
+6.Para realizar el build debe ejecutar lo siguiente
+  
+  gradlew clean build

@@ -1,0 +1,141 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 7130
+  adminConnectors:
+    - type: http
+      port: 17130
+  requestLog:
+    appenders: []
+serviceName: contribuyentems-registro-gre-envios-backend
+
+# MongoDB
+mongodb:
+   conexiones:
+   - credenciales:
+       usuario:  ${cnxmongousuarioope}
+       clave: ${cnxmongopwdope}
+     dsname: ${cnxmongodatasourceope}
+     nodos:
+       - host: ${cnxmongohostnode1ope}
+         port: ${cnxmongoportnode1ope}
+       - host: ${cnxmongohostnode2ope}
+         port: ${cnxmongoportnode2ope}
+       - host: ${cnxmongohostnode3ope}
+         port: ${cnxmongoportnode3ope}
+     database: ${cnxmongodatabaseope}
+     replicaset: ${cnxmongoreplicasetope}
+     readpreference: ${cnxmongoreadpreferenceope}
+     writeconcern: ${cnxmongowriteconcernope}
+     poolconfig:
+       maxPoolSize: ${cnxmongomaxpoolsizeope}
+       minPoolSize: ${cnxmongominpoolsizeope}
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: ${cnxmongousuariocon}
+       clave: ${cnxmongopwdcon}
+     dsname: ${cnxmongodatasourcecon}
+     nodos:
+       - host: ${cnxmongohostnode1con}
+         port: ${cnxmongoportnode1con}
+       - host: ${cnxmongohostnode2con}
+         port: ${cnxmongoportnode2con}
+       - host: ${cnxmongohostnode3con}
+         port: ${cnxmongoportnode3con}
+     database: ${cnxmongodatabasecon}
+     replicaset: ${cnxmongoreplicasetcon}
+     readpreference: ${cnxmongoreadpreferencecon}
+     writeconcern: ${cnxmongowriteconcerncon}
+     poolconfig:
+       maxPoolSize: ${cnxmongomaxpoolsizecon}
+       minPoolSize: ${cnxmongominpoolsizecon}
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: ${cnxmongousuarioopefs}
+       clave: ${cnxmongopwdopegfs}
+     dsname: ${cnxmongodatasourceopegfs}
+     nodos:
+       - host: ${cnxmongohostnode1opegfs}
+         port: ${cnxmongoportnode1opegfs}
+       - host: ${cnxmongohostnode2opegfs}
+         port: ${cnxmongoportnode2opegfs}
+       - host: ${cnxmongohostnode3opegfs}
+         port: ${cnxmongoportnode3opegfs}
+     database: ${cnxmongodatabaseopegfs}
+     replicaset: ${cnxmongoreplicasetopegfs}
+     readpreference: ${cnxmongoreadpreferenceopegfs}
+     writeconcern: ${cnxmongowriteconcernopegfs}
+     poolconfig:
+       maxPoolSize: ${cnxmongomaxpoolsizeopegfs}
+       minPoolSize: ${cnxmongominpoolsizeopegfs}
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: ${cnxmongousuariocongfs}
+       clave: ${cnxmongopwdcongfs}
+     dsname: ${cnxmongodatasourcecongfs}
+     nodos:
+       - host: ${cnxmongohostnode1congfs}
+         port: ${cnxmongoportnode1congfs}
+       - host: ${cnxmongohostnode2congfs}
+         port: ${cnxmongoportnode2congfs}
+       - host: ${cnxmongohostnode3congfs}
+         port: ${cnxmongoportnode3congfs}
+     database: ${cnxmongodatabasecongfs}
+     replicaset: ${cnxmongoreplicasetcongfs}
+     readpreference: ${cnxmongoreadpreferencecongfs}
+     writeconcern: ${cnxmongowriteconcerncongfs}
+     poolconfig:
+       maxPoolSize: ${cnxmongomaxpoolsizecongfs}
+       minPoolSize: ${cnxmongominpoolsizecongfs}
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+
+#kafka productor
+kafkaProducer:
+    topic: ${ssppproductortopicproducer}
+    bootstrap_server: ${clusterkafkaserver}
+    id: ${ssppproductortopicproducer}
+
+logging:
+  level: ${logginglevel}
+  loggers:
+    io.dropwizard: INFO
+    org.eclipse: INFO
+    org.hibernate: INFO
+    org.apache.camel: INFO
+    com.mchange: INFO
+    com.netflix: INFO
+    org.jboss.weld.Version: INFO
+    org.jboss.weld: INFO
+    io.dropwizard.jersey.DropwizardResourceConfig: INFO
+    io.dropwizard.server.ServerFactory: INFO
+    org.glassfish.jersey.server.ServerRuntime: FATAL
+    org.jboss.weld.environment.servlet.logging: INFO
+    com.atomikos.jdbc.AtomikosConnectionProxy: ERROR
+    com.circulosiete.metrics.health.hystrix: INFO
+    org.mongodb: INFO
+    pe.gob.sunat: ${loggingloggerssunat}
+  appenders:
+    - type: file
+      currentLogFilename: /logs//apps//contribuyentems-servicio-controlcpe-regenvios-backend//contribuyentems-servicio-controlcpe-regenvios-backend.log
+      archivedLogFilenamePattern: /logs//apps//contribuyentems-servicio-controlcpe-regenvios-backend//contribuyentems-servicio-controlcpe-regenvios-backend-%d-%i.log.gz
+      maxFileSize: 500MB
+      archivedFileCount: 20
+      timeZone: GMT-05:00
+    - type: console
+      timeZone: EST
+    - type: logstash-tcp
+      host: logstash-logforwarder
+      port: 9210
+      timeZone: EST
+      includeCallerData: true
+      includeMdc: true
+      includeContext: true
+      includeCallerInfo: true

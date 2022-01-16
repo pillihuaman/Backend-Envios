@@ -1,0 +1,19 @@
+apiVersion: extensions/v1beta1
+kind: Ingress
+metadata:
+  name: contribuyentems-servicio-controlcpe-regenvios-backend
+  labels:
+    name: contribuyentems-servicio-controlcpe-regenvios-backend
+  annotations:
+    nginx.ingress.kubernetes.io/use-regex: "true"
+spec:
+  rules:
+  - host: sunatcpe.k8s.sunat.peru
+    http:
+      paths:
+ #REST 9
+      - path: /v1/contribuyente/servicio/controlcpe/e/enviosmasivo/(.+)/(.+)
+        backend:
+          serviceName: contribuyentems-servicio-controlcpe-regenvios-backend-srv-np
+          servicePort: 7130
+

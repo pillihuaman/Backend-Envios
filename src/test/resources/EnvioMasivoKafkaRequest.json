@@ -1,0 +1,19 @@
+{
+  "_id" : "5fbd70c774281f4d4370c0a1",
+  "numRuc" : "1044372224",
+  "codTicketMasivo" : 202000000001,
+  "indTipoRegistro" : "01",
+  "indEstadoEnvio" : "01",
+  "nomArchivoPlano" : "202000000001-PND-20201124-99",
+  "fecInicioProceso" : "2020-11-15T19:00:00.965-05:00",
+  "fecFinProceso" : null,
+  "cntCpe" : 0,
+  "cntCorrectos" : 0,
+  "cntErrores" : 0,
+  "auditoria" : {
+    "codUsuRegis" : "usmigeope",
+    "fecRegis" : "2020-11-15T19:00:00.965-05:00",
+    "codUsuModif" : "usmigeope",
+    "fecModif" : "2020-11-15T19:00:00.965-05:00"
+  }
+}

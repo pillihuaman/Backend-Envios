@@ -1,0 +1,419 @@
+apiVersion: extensions/v1beta1
+kind: Deployment
+metadata:
+  name: contribuyentems-servicio-controlcpe-regenvios-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      name: contribuyentems-servicio-controlcpe-regenvios-backend
+  template:
+    metadata:
+      labels:
+        name: contribuyentems-servicio-controlcpe-regenvios-backend
+    spec:
+      imagePullSecrets:
+        - name: registrysunat
+      nodeSelector:
+        namespace: "contribuyente.registro.controlcpe.mige"
+      containers:
+        - image: integracion1-dr-local.artifactory.insi.sunat.peru/microservices/contribuyentems-servicio-controlcpe-regenvios-backend:1.0.2-0
+          name: contribuyentems-servicio-controlcpe-regenvios-backend
+          imagePullPolicy: Always
+          env:
+            - name: TZ
+              value: America/Lima          
+          resources:
+            requests:
+              memory: "512Mi"
+              cpu: "400m"
+            limits:
+              memory: "768Mi"
+              cpu: "500m"
+          env:
+            - name: clusterkafkaserver
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: clusterkafkaserver
+            - name: ssppproductortopicproducer
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: ssppproductortopicproducer
+            - name: cnxmongopwdope
+              valueFrom:
+                secretKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-secrets
+                  key: CNX_MONGO_CLIENT_SECRET_PE
+            - name: cnxmongopwdcon
+              valueFrom:
+                secretKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-secrets
+                  key: CNX_MONGO_CLIENT_SECRET_CON
+            - name: cnxmongopwdopegfs
+              valueFrom:
+                secretKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-secrets
+                  key: CNX_MONGO_CLIENT_SECRET_OPEGFS
+            - name: cnxmongopwdcongfs
+              valueFrom:
+                secretKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-secrets
+                  key: CNX_MONGO_CLIENT_SECRET_CONGFS
+            - name: cnxmongousuarioope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongousuarioope
+            - name: cnxmongousuariocon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongousuariocon
+            - name: cnxmongousuarioopefs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongousuarioopefs
+            - name: cnxmongousuariocongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongousuariocongfs
+            - name: logginglevel
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: logginglevel
+            - name: loggingloggerssunat
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: loggingloggerssunat
+            - name: cnxmongodatasourceope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatasourceope
+            - name: cnxmongodatabaseope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatabaseope
+            - name: cnxmongohostnode1ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode1ope
+            - name: cnxmongoportnode1ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode1ope
+            - name: cnxmongohostnode2ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode2ope
+            - name: cnxmongoportnode2ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode2ope
+            - name: cnxmongohostnode3ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode3ope
+            - name: cnxmongoportnode3ope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode3ope
+            - name: cnxmongoreplicasetope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreplicasetope
+            - name: cnxmongoreadpreferenceope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreadpreferenceope
+            - name: cnxmongowriteconcernope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongowriteconcernope
+            - name: cnxmongomaxpoolsizeope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongomaxpoolsizeope
+            - name: cnxmongominpoolsizeope
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongominpoolsizeope
+            - name: cnxmongodatasourcecon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatasourcecon
+            - name: cnxmongodatabasecon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatabasecon
+            - name: cnxmongohostnode1con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode1con
+            - name: cnxmongoportnode1con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode1con
+            - name: cnxmongohostnode2con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode2con
+            - name: cnxmongoportnode2con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode2con
+            - name: cnxmongohostnode3con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode3con
+            - name: cnxmongoportnode3con
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode3con
+            - name: cnxmongoreplicasetcon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreplicasetcon
+            - name: cnxmongoreadpreferencecon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreadpreferencecon
+            - name: cnxmongowriteconcerncon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongowriteconcerncon
+            - name: cnxmongomaxpoolsizecon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongomaxpoolsizecon
+            - name: cnxmongominpoolsizecon
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongominpoolsizecon
+            - name: cnxmongodatasourceopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatasourceopegfs
+            - name: cnxmongodatabaseopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatabaseopegfs
+            - name: cnxmongohostnode1opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode1opegfs
+            - name: cnxmongoportnode1opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode1opegfs
+            - name: cnxmongohostnode2opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode2opegfs
+            - name: cnxmongoportnode2opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode2opegfs
+            - name: cnxmongohostnode3opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode3opegfs
+            - name: cnxmongoportnode3opegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode3opegfs
+            - name: cnxmongoreplicasetopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreplicasetopegfs
+            - name: cnxmongoreadpreferenceopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreadpreferenceopegfs
+            - name: cnxmongowriteconcernopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongowriteconcernopegfs
+            - name: cnxmongomaxpoolsizeopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongomaxpoolsizeopegfs
+            - name: cnxmongominpoolsizeopegfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongominpoolsizeopegfs
+            - name: cnxmongodatasourcecongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatasourcecongfs
+            - name: cnxmongodatabasecongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongodatabasecongfs
+            - name: cnxmongohostnode1congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode1congfs
+            - name: cnxmongoportnode1congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode1congfs
+            - name: cnxmongohostnode2congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode2congfs
+            - name: cnxmongoportnode2congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode2congfs
+            - name: cnxmongohostnode3congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongohostnode3congfs
+            - name: cnxmongoportnode3congfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoportnode3congfs
+            - name: cnxmongoreplicasetcongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreplicasetcongfs
+            - name: cnxmongoreadpreferencecongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongoreadpreferencecongfs
+            - name: cnxmongowriteconcerncongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongowriteconcerncongfs
+            - name: cnxmongomaxpoolsizecongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongomaxpoolsizecongfs
+            - name: cnxmongominpoolsizecongfs
+              valueFrom:
+                configMapKeyRef:
+                  name: contribuyentems-servicio-controlcpe-regenvios-backend-configmap
+                  key: cnxmongominpoolsizecongfs
+          volumeMounts:
+            - mountPath: /config
+              name: contribuyentems-servicio-controlcpe-regenvios-backend
+            - mountPath: /etc/localtime
+              name: tz-config
+          ports:
+            - containerPort: 7130
+              protocol: TCP
+            - containerPort: 17130
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 17130
+            initialDelaySeconds: 50
+            periodSeconds: 40
+            timeoutSeconds: 30
+          readinessProbe:
+            httpGet:
+              path: /healthcheck
+              port: 17130
+            failureThreshold: 5
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            timeoutSeconds: 20
+            successThreshold: 1
+      hostAliases:
+        - ip: 192.168.56.194
+          hostnames:
+          - mdbcpesspp0.sunat.peru
+        - ip: 192.168.56.194
+          hostnames:
+          - mdbcpesspp1.sunat.peru
+        - ip: 192.168.56.194
+          hostnames:
+          - mdbcpesspp2.sunat.peru                  
+        - ip: 192.168.56.195
+          hostnames:
+          - srvcpeseskafka01.sunat.peru
+        - ip: 192.168.56.196
+          hostnames:
+          - srvcpeseskafka02.sunat.peru
+        - ip: 192.168.56.197
+          hostnames:
+          - srvcpeseskafka03.sunat.peru
+      volumes:
+        - name: contribuyentems-servicio-controlcpe-regenvios-backend
+          hostPath:
+            # directory location on host
+            path: /opt/sunat/microservices/config/contribuyentems-servicio-controlcpe-regenvios-backend
+        - name: tz-config
+          hostPath:
+            path: /etc/localtime    
+---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: contribuyentems-servicio-controlcpe-regenvios-backend
+spec:
+  maxReplicas: 1
+  minReplicas: 1
+  targetCPUUtilizationPercentage: 15
+  scaleTargetRef:
+    apiVersion: extensions/v1beta1
+    kind: Deployment
+    name: contribuyentems-servicio-controlcpe-regenvios-backend

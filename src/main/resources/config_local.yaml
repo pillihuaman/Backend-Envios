@@ -1,0 +1,144 @@
+server:
+  applicationConnectors:
+    - type: http
+      port: 7130
+  adminConnectors:
+    - type: http
+      port: 17130
+  requestLog:
+    appenders: []
+serviceName: contribuyentems-registro-gre-envios-backend
+
+# MongoDB
+mongodb:
+   conexiones:
+   - credenciales:
+       usuario: "usmigecon"
+       clave: "pwusmigecon"
+     dsname: "dcbdServMige"
+     nodos:
+       - host: "mdbcpesspp0.sunat.peru"
+         port: 27017
+       - host: "mdbcpesspp1.sunat.peru"
+         port: 27018
+       - host: "mdbcpesspp2.sunat.peru"
+         port: 27019
+     database: "bdMige"
+     replicaset: "cpessppRs0"
+     readpreference: "secondaryPreferred"
+     writeconcern: "w1"
+     poolconfig:
+       maxPoolSize: 200
+       minPoolSize: 0
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: "usmigeope"
+       clave: "pwusmigeope"
+     dsname: "dgbdServMige"
+     nodos:
+       - host: "mdbcpesspp0.sunat.peru"
+         port: 27017
+       - host: "mdbcpesspp1.sunat.peru"
+         port: 27018
+       - host: "mdbcpesspp2.sunat.peru"
+         port: 27019
+     database: "bdMige"
+     replicaset: "cpessppRs0"
+     readpreference: "primary"
+     writeconcern: "w1"
+     poolconfig:
+       maxPoolSize: 200
+       minPoolSize: 0
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: "usmigearchivoscon"
+       clave: "pwusmigearchivoscon"
+     dsname: "dcbdServMigeArchivos"
+     nodos:
+       - host: "mdbcpesspp0.sunat.peru"
+         port: 27017
+       - host: "mdbcpesspp1.sunat.peru"
+         port: 27018
+       - host: "mdbcpesspp2.sunat.peru"
+         port: 27019
+     database: "bdMigeArchivos"
+     replicaset: "cpessppRs0"
+     readpreference: "secondaryPreferred"
+     writeconcern: "w1"
+     poolconfig:
+       maxPoolSize: 200
+       minPoolSize: 0
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+   - credenciales:
+       usuario: "usmigearchivosope"
+       clave: "pwusmigearchivosope"
+     dsname: "dgbdServMigeArchivos"
+     nodos:
+       - host: "mdbcpesspp0.sunat.peru"
+         port: 27017
+       - host: "mdbcpesspp1.sunat.peru"
+         port: 27018
+       - host: "mdbcpesspp2.sunat.peru"
+         port: 27019
+     database: "bdMigeArchivos"
+     replicaset: "cpessppRs0"
+     readpreference: "primary"
+     writeconcern: "w1"
+     poolconfig:
+       maxPoolSize: 200
+       minPoolSize: 0
+     pojos:
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.bean"
+       - "pe.gob.sunat.contribuyentems.servicio.controlcpe.registro.envios.domain"
+
+#kafka productor
+kafkaProducer:
+    topic: topic-contribuyente-servicio-controlcpe-registromasivo
+    bootstrap_server: srvcpeseskafka01.sunat.peru:9092,srvcpeseskafka02.sunat.peru:9092,srvcpeseskafka03.sunat.peru:9092
+    id: topic-contribuyente-servicio-controlcpe-registromasivo
+
+logging:
+  level: DEBUG
+  loggers:
+    io.dropwizard: INFO
+    org.eclipse: INFO
+    org.hibernate: INFO
+    org.apache.camel: INFO
+    com.mchange: INFO
+    com.netflix: INFO
+    org.jboss.weld.Version: INFO
+    org.jboss.weld: INFO
+    io.dropwizard.jersey.DropwizardResourceConfig: INFO
+    io.dropwizard.server.ServerFactory: INFO
+    org.glassfish.jersey.server.ServerRuntime: FATAL
+    org.jboss.weld.environment.servlet.logging: INFO
+    com.atomikos.jdbc.AtomikosConnectionProxy: ERROR
+    com.circulosiete.metrics.health.hystrix: INFO
+    org.mongodb: INFO
+    pe.gob.sunat: DEBUG
+  appenders:
+    - type: file
+      currentLogFilename: /logs//apps//contribuyentems-servicio-controlcpe-regenvios-backend//contribuyentems-servicio-controlcpe-regenvios-backend.log
+      archivedLogFilenamePattern: /logs//apps//contribuyentems-servicio-controlcpe-regenvios-backend//contribuyentems-servicio-controlcpe-regenvios-backend-%d-%i.log.gz
+      maxFileSize: 500MB
+      archivedFileCount: 20
+      timeZone: GMT-05:00
+    - type: console
+      timeZone: EST
+#    - type: logstash-tcp
+#      host: logstash-logforwarder
+#      port: 9210
+#      timeZone: EST
+#      includeCallerData: true
+#      includeMdc: true
+#      includeContext: true
+#      includeCallerInfo: true
+#      customFields:
+#        serviceName: control-acceso
+#        environment: qa
